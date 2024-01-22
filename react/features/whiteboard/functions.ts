@@ -98,3 +98,4 @@ export const isWhiteboardVisible = (state: IReduxState): boolean =>
 */
 export const isWhiteboardAllowed = (state: IReduxState): boolean =>
     isWhiteboardEnabled(state) && isLocalParticipantModerator(state);
+

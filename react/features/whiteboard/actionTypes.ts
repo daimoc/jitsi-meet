@@ -23,3 +23,7 @@ export const RESET_WHITEBOARD: string = 'RESET_WHITEBOARD';
  * }}
  */
 export const SET_WHITEBOARD_OPEN: string = 'SET_WHITEBOARD_OPEN';
+
+export const SET_WITEBOARD_API_REF: string = 'SET_WITEBOARD_API_REF';
+
+export const EXPORT_WHITEBOARD: string = 'EXPORT_WHITEBOARD';

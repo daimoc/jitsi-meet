@@ -1,7 +1,7 @@
 import { IStore } from '../app/types';
 
-import { setWhiteboardOpen } from './actions';
-import { isWhiteboardAllowed, isWhiteboardOpen, isWhiteboardVisible } from './functions';
+import { setWhiteboardOpen, exportWhiteboardAction } from './actions';
+import { isWhiteboardAllowed, isWhiteboardOpen, isWhiteboardVisible, } from './functions';
 import { WhiteboardStatus } from './types';
 
 
@@ -26,6 +26,17 @@ export function toggleWhiteboard() {
             }
         } else if (typeof APP !== 'undefined') {
             APP.API.notifyWhiteboardStatusChanged(WhiteboardStatus.FORBIDDEN);
+        }
+    };
+}
+
+export function exportWhiteboard() {
+    return async (dispatch: IStore['dispatch'], getState: IStore['getState']) => {
+        const state = getState();
+        const isAllowed = isWhiteboardAllowed(state);
+
+        if (isAllowed) {
+           dispatch(exportWhiteboardAction());
         }
     };
 }

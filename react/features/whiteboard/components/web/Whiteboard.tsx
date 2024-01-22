@@ -1,8 +1,8 @@
-import { ExcalidrawApp } from '@jitsi/excalidraw';
+import { ExcalidrawApp, ExcalidrawImperativeAPI } from '@jitsi/excalidraw';
 import clsx from 'clsx';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { WithTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 
 // @ts-expect-error
 import Filmstrip from '../../../../../modules/UI/videolayout/Filmstrip';
@@ -19,6 +19,7 @@ import {
     isWhiteboardOpen,
     isWhiteboardVisible
 } from '../../functions';
+import { setWhiteboardAPIref } from '../../actions';
 
 /**
  * Space taken by meeting elements like the subject and the watermark.
@@ -41,9 +42,16 @@ interface IDimensions {
  * @returns {JSX.Element} - The React component.
  */
 const Whiteboard = (props: WithTranslation): JSX.Element => {
-    const excalidrawRef = useRef<any>(null);
-    const collabAPIRef = useRef<any>(null);
+    //const excalidrawRef = useRef<ExcalidrawImperativeAPI>(null);
+    
 
+    const excalidrawApiRef = React.useRef(null);
+    const excalidrawRef = React.useCallback((excalidrawApi) => {
+        excalidrawApiRef.current = excalidrawApi;
+    }, []);
+    
+    const collabAPIRef = useRef<any>(null);
+   
     const isOpen = useSelector(isWhiteboardOpen);
     const isVisible = useSelector(isWhiteboardVisible);
     const isInTileView = useSelector(shouldDisplayTileView);
@@ -55,13 +63,21 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
     const { defaultRemoteDisplayName } = useSelector((state: IReduxState) => state['features/base/config']);
     const localParticipantName = useSelector(getLocalParticipant)?.name || defaultRemoteDisplayName || 'Fellow Jitster';
 
+    const excalidrawAPI = useState<ExcalidrawImperativeAPI>();
+
+    const dispatch = useDispatch();
+
     useEffect(() => {
         if (!collabAPIRef.current) {
             return;
         }
 
+        if (excalidrawAPI){
+            dispatch(setWhiteboardAPIref(excalidrawApiRef));
+        }
         collabAPIRef.current.setUsername(localParticipantName);
-    }, [ localParticipantName ]);
+    }, [ localParticipantName, excalidrawRef ]);
+
 
     /**
     * Computes the width and the height of the component.
@@ -137,7 +153,7 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
                                 isCollaborating: true,
 
                                 // @ts-ignore
-                                ref: excalidrawRef,
+                                ref : excalidrawRef ,
                                 theme: 'light',
                                 UIOptions: WHITEBOARD_UI_OPTIONS
                             }}

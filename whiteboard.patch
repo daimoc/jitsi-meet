@@ -1,0 +1,63 @@
+diff --git a/modules/API/API.js b/modules/API/API.js
+index 4ad13a086..0ba2b0505 100644
+--- a/modules/API/API.js
++++ b/modules/API/API.js
+@@ -824,6 +824,7 @@ function initCommands() {
+                 defaultTab: SETTINGS_TABS.VIRTUAL_BACKGROUND }));
+         },
+         'end-conference': () => {
++            APP.store.dispatch(exportWhiteboard());
+             APP.store.dispatch(endConference());
+             const state = APP.store.getState();
+             const conference = getCurrentConference(state);
+@@ -838,6 +839,9 @@ function initCommands() {
+         },
+         'toggle-whiteboard': () => {
+             APP.store.dispatch(toggleWhiteboard());
++        },
++        'export-whiteboard': () => {
++            APP.store.dispatch(exportWhiteboard());
+         }
+     };
+     transport.on('event', ({ data, name }) => {
+diff --git a/modules/API/external/external_api.js b/modules/API/external/external_api.js
+index 84070d886..91485adf7 100644
+--- a/modules/API/external/external_api.js
++++ b/modules/API/external/external_api.js
+@@ -91,7 +91,8 @@ const commands = {
+     toggleTileView: 'toggle-tile-view',
+     toggleVirtualBackgroundDialog: 'toggle-virtual-background',
+     toggleVideo: 'toggle-video',
+-    toggleWhiteboard: 'toggle-whiteboard'
++    toggleWhiteboard: 'toggle-whiteboard',
++    exportWhiteboard: 'export-whiteboard'
+ };
+ 
+ /**
+diff --git a/react/features/whiteboard/actions.any.ts b/react/features/whiteboard/actions.any.ts
+index 7f7f1c490..481fd988a 100644
+--- a/react/features/whiteboard/actions.any.ts
++++ b/react/features/whiteboard/actions.any.ts
+@@ -3,6 +3,7 @@ import { IStore } from '../app/types';
+ import { setWhiteboardOpen } from './actions';
+ import { isWhiteboardAllowed, isWhiteboardOpen, isWhiteboardVisible } from './functions';
+ import { WhiteboardStatus } from './types';
++import { exportToBlob } from '@jitsi/excalidraw';
+ 
+ 
+ /**
+@@ -29,3 +30,14 @@ export function toggleWhiteboard() {
+         }
+     };
+ }
++
++export function exportWhiteboard() {
++    return async (dispatch: IStore['dispatch'], getState: IStore['getState']) => {
++        const state = getState();
++        const isAllowed = isWhiteboardAllowed(state);
++
++        if (isAllowed) {
++            APP.API.whiteboardImage = dispatch(exportToBlob({'elements':window.Whiteboard}));
++        }
++    };
++}

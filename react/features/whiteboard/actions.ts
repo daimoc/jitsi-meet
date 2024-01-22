@@ -1,8 +1,11 @@
 import {
+    EXPORT_WHITEBOARD,
     RESET_WHITEBOARD,
     SETUP_WHITEBOARD,
-    SET_WHITEBOARD_OPEN
+    SET_WHITEBOARD_OPEN,
+    SET_WITEBOARD_API_REF
 } from './actionTypes';
+
 import { IWhiteboardAction } from './reducer';
 
 /**
@@ -50,3 +53,15 @@ export const setWhiteboardOpen = (isOpen: boolean): IWhiteboardAction => {
         isOpen
     };
 };
+
+
+
+export const setWhiteboardAPIref = (value : any) => ({
+    type: SET_WITEBOARD_API_REF,
+    payload: value,
+  });
+
+export const exportWhiteboardAction = () => ({
+    type: EXPORT_WHITEBOARD
+});
+  

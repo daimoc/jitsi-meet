@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rendez-Vous</title>
+    <link rel="icon" type="image/x-icon" href="/home/assets/images/favicon.png">
+    <script src='https://alpha.jitsi.net/external_api.js'></script>
+    <style>
+        html {
+            overflow: auto;
+        }
+
+        html,
+        body,
+        div,
+        iframe {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            border: none;
+        }
+
+    </style>
+</head>
+<body>
+<div id='meet'></div>
+
+<script>
+    const room = "test4242";
+    const domain = 'alpha.jitsi.net';
+    const options = {
+        roomName: room,
+        parentNode: document.querySelector('#meet'),
+    };
+    const api = new JitsiMeetExternalAPI(domain, options);
+</script>
+</body>
+</html>

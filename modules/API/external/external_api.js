@@ -91,7 +91,8 @@ const commands = {
     toggleTileView: 'toggle-tile-view',
     toggleVirtualBackgroundDialog: 'toggle-virtual-background',
     toggleVideo: 'toggle-video',
-    toggleWhiteboard: 'toggle-whiteboard'
+    toggleWhiteboard: 'toggle-whiteboard',
+    exportWhiteboard: 'export-whiteboard'
 };
 
 /**
